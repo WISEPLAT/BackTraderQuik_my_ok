@@ -82,11 +82,16 @@ class QKStore(with_metaclass(MetaSingleton, object)):
 
     def DataNameToClassSecCode(self, dataname):
         """Код площадки и код тикера из названия тикера (с кодом площадки или без него)"""
-        symbolParts = dataname.split('.')  # По разделителю пытаемся разбить тикер на части
-        if len(symbolParts) == 2:  # Если тикер задан в формате <Код площадки>.<Код тикера>
-            return symbolParts[0], symbolParts[1]  # то возвращаем код площадки и код тикера
-        classCode = self.qpProvider.GetSecurityClass(self.classCodes, dataname)['data']  # Получаем класс по коду инструмента из заданных классов
-        return classCode, dataname  # Возвращаем код площадки и код тикера
+        # symbolParts = dataname.split('.')  # По разделителю пытаемся разбить тикер на части
+        # if len(symbolParts) == 2:  # Если тикер задан в формате <Код площадки>.<Код тикера>
+        #     return symbolParts[0], symbolParts[1]  # то возвращаем код площадки и код тикера
+        # classCode = self.qpProvider.GetSecurityClass(self.classCodes, dataname)['data']  # Получаем класс по коду инструмента из заданных классов
+        # return classCode, dataname  # Возвращаем код площадки и код тикера
+
+        _point = dataname.index('.')
+        classCode = dataname[0:_point]  # Класс тикера
+        secCode = dataname[_point + 1:]  # Тикер +1 для точки
+        return classCode, secCode  # Возвращаем код площадки и код тикера
 
     def ClassSecCodeToDataName(self, ClassCode, SecCode):
         """Название тикера из кода площадки и кода тикера"""
